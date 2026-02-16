@@ -3,15 +3,15 @@
 This repository includes a small script to preprocess images under `data/Dataset/PetImages` to 224x224 RGB images suitable for standard CNNs.
 
 Files added:
-- `scripts/preprocess_petimages.py` — main preprocessing script
+- `preprocess_petimages.py` — main preprocessing script
 - `requirements-preprocess.txt` — minimal Python deps
 
 Quick run:
 
 ```bash
-python scripts/preprocess_petimages.py \
+python preprocess_petimages.py \
   --input data/Dataset/PetImages \
-  --output data/Dataset/PetImages_224 \
+  --output data/processed/PetImages_224 \
   --method resize_crop \
   --workers 8
 ```
