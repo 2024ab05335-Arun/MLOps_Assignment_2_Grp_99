@@ -4,7 +4,7 @@
 Usage examples:
   python scripts/preprocess_petimages.py \
     --input data/Dataset/PetImages \
-    --output data/Dataset/processed/PetImages_224 \
+    --output data/processed/PetImages_224 \
     --method resize_crop \
     --workers 8
 """
@@ -65,7 +65,7 @@ def main():
     p = argparse.ArgumentParser()
     p.add_argument("--input", "-i", required=False, default="data/Dataset/PetImages",
                    help="Input dataset root (class subfolders expected)")
-    p.add_argument("--output", "-o", required=False, default="data/Dataset/processed/PetImages_224",
+    p.add_argument("--output", "-o", required=False, default="data/processed/PetImages_224",
                    help="Output root where processed images are saved")
     p.add_argument("--method", choices=["resize_crop", "resize"], default="resize_crop",
                    help="Resize method: 'resize_crop' (shorter->256 then center-crop 224) or 'resize' (direct 224x224)")
