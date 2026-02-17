@@ -1,0 +1,14 @@
+artifact_uri: file:///c:/ArunDocs/Code/MLOps_Assignment_2_Grp_99/mlruns/942559403075704622/417a623abbdf4c0ea1de860e32737aad/artifacts
+end_time: 1771338683424
+entry_point_name: ''
+experiment_id: '942559403075704622'
+lifecycle_stage: active
+run_id: 417a623abbdf4c0ea1de860e32737aad
+run_name: baseline_cnn
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1771337168577
+status: 3
+tags: []
+user_id: arung

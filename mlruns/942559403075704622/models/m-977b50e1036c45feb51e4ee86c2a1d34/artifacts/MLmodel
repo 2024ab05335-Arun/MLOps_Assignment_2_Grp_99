@@ -1,0 +1,20 @@
+artifact_path: file:///c:/ArunDocs/Code/MLOps_Assignment_2_Grp_99/mlruns/942559403075704622/models/m-977b50e1036c45feb51e4ee86c2a1d34/artifacts
+flavors:
+  keras:
+    data: data
+    keras_backend: tensorflow
+    keras_version: 3.12.0
+    save_exported_model: false
+  python_function:
+    env:
+      conda: conda.yaml
+      virtualenv: python_env.yaml
+    loader_module: mlflow.keras
+    python_version: 3.13.12
+mlflow_version: 3.8.1
+model_id: m-977b50e1036c45feb51e4ee86c2a1d34
+model_size_bytes: 134077826
+model_uuid: m-977b50e1036c45feb51e4ee86c2a1d34
+prompts: null
+run_id: cfa68660938f4a60ab5e5b14933797dd
+utc_time_created: '2026-02-17 14:31:34.787663'

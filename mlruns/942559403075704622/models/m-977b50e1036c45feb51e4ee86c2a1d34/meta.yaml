@@ -1,0 +1,10 @@
+artifact_location: file:///c:/ArunDocs/Code/MLOps_Assignment_2_Grp_99/mlruns/942559403075704622/models/m-977b50e1036c45feb51e4ee86c2a1d34/artifacts
+creation_timestamp: 1771338694767
+experiment_id: '942559403075704622'
+last_updated_timestamp: 1771338702051
+model_id: m-977b50e1036c45feb51e4ee86c2a1d34
+model_type: null
+name: evaluated_model
+source_run_id: cfa68660938f4a60ab5e5b14933797dd
+status: 2
+status_message: null

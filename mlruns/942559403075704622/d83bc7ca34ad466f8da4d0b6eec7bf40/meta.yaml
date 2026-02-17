@@ -1,0 +1,14 @@
+artifact_uri: file:///c:/ArunDocs/Code/MLOps_Assignment_2_Grp_99/mlruns/942559403075704622/d83bc7ca34ad466f8da4d0b6eec7bf40/artifacts
+end_time: 1771336940504
+entry_point_name: ''
+experiment_id: '942559403075704622'
+lifecycle_stage: active
+run_id: d83bc7ca34ad466f8da4d0b6eec7bf40
+run_name: evaluation
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1771336933551
+status: 3
+tags: []
+user_id: arung
