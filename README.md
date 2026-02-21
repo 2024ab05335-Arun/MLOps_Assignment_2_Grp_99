@@ -261,18 +261,27 @@
     ```bash
         curl http://localhost:8000/health
     ```
-    Output:
-    ```{"status":"ok","model_loaded":true}```
+    - Output:
+
+        ```
+        {"status":"ok","model_loaded":true}
+
     ```bash
         curl -X POST "http://localhost:8000/predict" -F "files=@data/processed/PetImages_224_split/test/Cat/111.jpg"
     ```
-    Output:
-    ```{"predictions":[{"probabilities":[0.9991834759712219,0.0008165583130903542],"predicted_class":0,"predicted_label":null}]}```
+    - Output:
+
+        ```
+        {"predictions":[{"probabilities":[0.9991834759712219,0.0008165583130903542],"predicted_class":0,"predicted_label":null}]}
+
     ```bash
         curl -X POST "http://localhost:8000/predict" -F "files=@data/processed/PetImages_224_split/test/Dog/0.jpg"
     ```
-    Output:
-    ```{"predictions":[{"probabilities":[0.005587819032371044,0.9944122433662415],"predicted_class":1,"predicted_label":null}]}```
+
+    - Output:
+
+        ```
+        {"predictions":[{"probabilities":[0.005587819032371044,0.9944122433662415],"predicted_class":1,"predicted_label":null}]}
 
 - Test inference service logging
 
