@@ -79,7 +79,7 @@
         - run using an MLflow model URI (recommended)
             ```
             docker run -p 8000:8000 --rm -e MODEL_URI="runs:/<run_id>/model" pet-inference:latest
-        ```
+            ```
 ##### M3: CI Pipeline for Build, Test & Image Creation
 - 1. Automated Testing
 
