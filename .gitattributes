@@ -1,3 +1,4 @@
 data/processed/** filter=lfs diff=lfs merge=lfs -text
 *.h5 filter=lfs diff=lfs merge=lfs -text
 mlruns/942559403075704622/models/*/artifacts/data/model.keras filter=lfs diff=lfs merge=lfs -text
+baseline_cnn_best.h5 filter=lfs diff=lfs merge=lfs -text
