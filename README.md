@@ -198,6 +198,10 @@
     ```bash
         mlflow ui --backend-store-uri file:///C:/ArunDocs/Code/MLOps_Assignment_2_Grp_99/mlruns --port 5000
     ```
+    - MLFlow UI screenshot added in folder:    
+        ```
+        mlflow_screenshots
+        ```
 
 - Start Inference Service for model with run_id: ef566c44824241769ef049f8c0f15577
 
