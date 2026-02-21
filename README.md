@@ -13,6 +13,7 @@
     - `data_split.py` — data split script
 
     Quick run:
+
         ```bash
         python preprocess_petimages.py \
         --input data/Dataset/PetImages \
@@ -20,6 +21,7 @@
         --method resize_crop \
         --workers 8
         ```
+
         ```bash
         python data_split.py
         ```
@@ -40,7 +42,8 @@
         Use MLFlow to log runs, parameters, metrics, and artifacts (confusion matrix, loss curves)
         
         Files added:
-        - `preprmlflow_workflow.py` — Train model and configure MLFlow
+
+        - `mlflow_workflow.py` — Train model and configure MLFlow
             ```bash
             python mlflow_workflow.py
             python mlflow_workflow.py --epochs 10
@@ -60,6 +63,7 @@
         Files added:
         - `inference_service.py` — REST API to access model for inderence
         - `inference_client.py` — Inference client to validate the image
+
             ```bash
             python inference_service.py --port 8000 --model-uri "runs:/<run_id>/model"
             python inference_service.py --port 8000 --model-uri "runs:/a40b43613cdb458b93c2da1e0a723b02/model"
@@ -88,6 +92,7 @@
         Files added:
         - `tests/test_inference_utils.py` — REST API to access model for inderence
         - `tests/test_preprocess.py` — Inference client to validate the image
+
             ```bash
             python -m pytest -q tests -q
             python -m pytest tests -vv > pytest_output.txt 2>&1
@@ -166,6 +171,7 @@
 - 3. Smoke Tests / Health Check 
 
         - Verify endpoints:
+        
             ```bash
             curl http://localhost:8000/health
             curl -X POST "http://localhost:8000/predict" -F "files=@data/processed/PetImages_224_split/test/Cat/<image>.jpg"
