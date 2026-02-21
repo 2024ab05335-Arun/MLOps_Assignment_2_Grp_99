@@ -195,4 +195,4 @@
         ```
 
         Output: CSV (`monitoring/results.csv`) with columns: `image_path`, `true_label`, `status_code`, `predicted_label`, `response_json`.
-        Collect a small batch of real or simulated requests and true labels.    
+        
