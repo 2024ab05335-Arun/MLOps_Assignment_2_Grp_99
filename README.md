@@ -12,17 +12,10 @@
     - `preprocess_petimages.py` — main preprocessing script
     - `data_split.py` — data split script
 
-    Quick run:
+    - Quick run:
 
         ```bash
-        python preprocess_petimages.py \
-        --input data/Dataset/PetImages \
-        --output data/processed/PetImages_224 \
-        --method resize_crop \
-        --workers 8
-        ```
-
-        ```bash
+        python preprocess_petimages.py --input data/Dataset/PetImages --output data/processed/PetImages_224 --method resize_crop --workers 8
         python data_split.py
         ```
 
@@ -44,6 +37,7 @@
         Files added:
 
         - `mlflow_workflow.py` — Train model and configure MLFlow
+
             ```bash
             python mlflow_workflow.py
             python mlflow_workflow.py --epochs 10
@@ -171,7 +165,7 @@
 - 3. Smoke Tests / Health Check 
 
         - Verify endpoints:
-        
+
             ```bash
             curl http://localhost:8000/health
             curl -X POST "http://localhost:8000/predict" -F "files=@data/processed/PetImages_224_split/test/Cat/<image>.jpg"
@@ -194,5 +188,4 @@
         python monitoring/collect_requests.py --url http://localhost:8000 --image-dir data/processed/PetImages_224_split/test --output monitoring/results.csv --limit 100
         ```
 
-        Output: CSV (`monitoring/results.csv`) with columns: `image_path`, `true_label`, `status_code`, `predicted_label`, `response_json`.
-        
+        Output: CSV (`monitoring/results.csv`) with columns: `image_path`, `true_label`, `status_code`, `predicted_label`, `response_json`. 
