@@ -1,0 +1,49 @@
+name: CD - Deploy to server
+
+on:
+  push:
+    branches: [ main ]
+
+jobs:
+  deploy:
+    name: Deploy to production server
+    environment: production
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Start SSH agent with private key
+        uses: webfactory/ssh-agent@v0.5.4
+        with:
+          ssh-private-key: ${{ secrets.DEPLOY_SSH_KEY }}
+
+      - name: Remote deploy (docker-compose)
+        env:
+          DEPLOY_HOST: ${{ secrets.DEPLOY_HOST }}
+          DEPLOY_USER: ${{ secrets.DEPLOY_USER }}
+          DEPLOY_PORT: ${{ secrets.DEPLOY_SSH_PORT }}
+          DEPLOY_PATH: ${{ secrets.DEPLOY_PATH }}
+          DOCKERHUB_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
+          DOCKERHUB_PASSWORD: ${{ secrets.DOCKERHUB_PASSWORD }}
+        run: |
+          set -euo pipefail
+          PORT=${DEPLOY_PORT:-22}
+          SSH_TARGET="${DEPLOY_USER}@${DEPLOY_HOST} -p ${PORT}"
+          echo "Deploying to ${SSH_TARGET}:${DEPLOY_PATH}"
+
+          REMOTE_CMD=''
+          REMOTE_CMD+="cd ${DEPLOY_PATH} || exit 2;"
+          REMOTE_CMD+="if [ -n \"${DOCKERHUB_USERNAME}\" ] && [ -n \"${DOCKERHUB_PASSWORD}\" ]; then echo \"${DOCKERHUB_PASSWORD}\" | docker login -u \"${DOCKERHUB_USERNAME}\" --password-stdin; fi;"
+          REMOTE_CMD+="docker-compose pull && docker-compose up -d --remove-orphans"
+
+          ssh -o StrictHostKeyChecking=no ${DEPLOY_USER}@${DEPLOY_HOST} -p ${PORT} "${REMOTE_CMD}"
+
+      - name: Verify service health
+        env:
+          DEPLOY_HOST: ${{ secrets.DEPLOY_HOST }}
+          DEPLOY_USER: ${{ secrets.DEPLOY_USER }}
+          DEPLOY_PORT: ${{ secrets.DEPLOY_SSH_PORT }}
+        run: |
+          PORT=${DEPLOY_PORT:-22}
+          ssh -o StrictHostKeyChecking=no ${DEPLOY_USER}@${DEPLOY_HOST} -p ${PORT} "curl -fsS --retry 5 --max-time 10 http://localhost:8000/health || (echo 'healthcheck failed' && exit 2)"

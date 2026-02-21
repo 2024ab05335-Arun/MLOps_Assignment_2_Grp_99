@@ -1,0 +1,30 @@
+version: '3.8'
+
+services:
+  inference:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: mlops-assignment2/pet-inference:latest
+    ports:
+      - "8000:8000"
+    environment:
+      MODEL_URI: ${MODEL_URI:-runs:/a40b43613cdb458b93c2da1e0a723b02/model}
+      PORT: ${PORT:-8000}
+    volumes:
+      - ./mlruns:/app/mlruns
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD-SHELL", "curl -f http://localhost:8000/health || exit 1"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  mlflow:
+    image: python:3.10-slim
+    command: bash -lc "pip install --no-cache-dir mlflow && mlflow ui --host 0.0.0.0 --backend-store-uri /opt/mlruns --default-artifact-root /opt/mlruns"
+    ports:
+      - "5000:5000"
+    volumes:
+      - ./mlruns:/opt/mlruns
+    restart: unless-stopped
