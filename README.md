@@ -84,7 +84,7 @@
         Unit test using pytest
 
         Files added:
-        - `tests/test_inference_utils.py` — REST API to access model for inderence
+        - `tests/test_inference_utils.py` — REST API to access model for inference
         - `tests/test_preprocess.py` — Inference client to validate the image
 
             ```bash
@@ -97,7 +97,7 @@
 
         Workflow files:
         - `.github/workflows/ci.yml` (root) — generic repo CI
-        - `MLOps_Assignment_2_Grp_99/.github/workflows/ci.yml` — runs tests and builds the subproject image
+        - `.github/workflows/ci.yml` — runs tests and builds the subproject image
 - 3. Artifact Publishing: 
 
         To enable pushing built images from CI, set one of the following repository secrets:
@@ -189,3 +189,97 @@
         ```
 
         Output: CSV (`monitoring/results.csv`) with columns: `image_path`, `true_label`, `status_code`, `predicted_label`, `response_json`. 
+
+
+##### Sample Run
+
+- Start MLFlow UI:
+
+    ```bash
+        mlflow ui --backend-store-uri file:///C:/ArunDocs/Code/MLOps_Assignment_2_Grp_99/mlruns --port 5000
+    ```
+
+- Start Inference Service for model with run_id: ef566c44824241769ef049f8c0f15577
+
+    ```bash
+        python inference_service.py --port 8000 --model-uri "runs:/ef566c44824241769ef049f8c0f15577/model"
+    ```
+        
+- Check health of inference service
+
+    ```bash
+        localhost:8000/metrics
+    ```
+    ![image-2.png](attachment:image-2.png)
+
+    ```bash
+        localhost:8000/health
+    ```
+    ![image.png](attachment:image.png)
+
+- Test client for inference service
+
+    ```bash
+        python inference_client.py --image data\processed\PetImages_224_split\val\Cat\2.jpg --mode file --url http://localhost:8000
+    ```
+    - Output : Predict: Cat (Class 0)
+
+        ```
+        {
+            "predictions": [
+                {
+                "probabilities": [
+                    0.8913493156433105,
+                    0.10865061730146408
+                ],
+                "predicted_class": 0,
+                "predicted_label": null
+                }
+            ]
+        } 
+
+    ```bash
+        python inference_client.py --image C:\ArunDocs\Code\MLOps_Assignment_2_Grp_99\data\processed\PetImages_224_split\val\Dog\5.jpg --mode file --url http://localhost:8000
+    ```
+    - Output : Predict: Dog (Class 1)
+
+        ```
+        {
+            "predictions": [
+                {
+                "probabilities": [
+                    0.009738803841173649,
+                    0.9902612566947937
+                ],
+                "predicted_class": 1,
+                "predicted_label": null
+                }
+            ]
+        } 
+
+- Test Inference Service
+    ```bash
+        curl http://localhost:8000/health
+    ```
+    Output:
+    ```{"status":"ok","model_loaded":true}```
+    ```bash
+        curl -X POST "http://localhost:8000/predict" -F "files=@data/processed/PetImages_224_split/test/Cat/111.jpg"
+    ```
+    Output:
+    ```{"predictions":[{"probabilities":[0.9991834759712219,0.0008165583130903542],"predicted_class":0,"predicted_label":null}]}```
+    ```bash
+        curl -X POST "http://localhost:8000/predict" -F "files=@data/processed/PetImages_224_split/test/Dog/0.jpg"
+    ```
+    Output:
+    ```{"predictions":[{"probabilities":[0.005587819032371044,0.9944122433662415],"predicted_class":1,"predicted_label":null}]}```
+
+- Test inference service logging
+
+    ![image-4.png](attachment:image-4.png)
+
+- Test model performance script
+
+    ```bash
+        python monitoring/collect_requests.py --url http://localhost:8000 --image-dir data/processed/PetImages_224_split/test --output monitoring/results.csv --limit 100
+    ```
