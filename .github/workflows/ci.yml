@@ -1,0 +1,85 @@
+
+name: CI (MLOps_Assignment_2_Grp_99)
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+permissions:
+  contents: read
+  packages: write
+
+jobs:
+  test-and-build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.10'
+
+      - name: Cache pip
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/pip
+          key: ${{ runner.os }}-pip-${{ hashFiles('**/MLOps_Assignment_2_Grp_99/requirements.txt') }}
+          restore-keys: |
+            ${{ runner.os }}-pip-
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          if [ -f MLOps_Assignment_2_Grp_99/requirements.txt ]; then pip install -r MLOps_Assignment_2_Grp_99/requirements.txt; fi
+
+      - name: Run unit tests
+        run: |
+          python -m pytest -q MLOps_Assignment_2_Grp_99/tests
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v2
+
+      - name: Build Docker image (subproject)
+        uses: docker/build-push-action@v4
+        with:
+          context: ./MLOps_Assignment_2_Grp_99
+          file: ./MLOps_Assignment_2_Grp_99/Dockerfile
+          push: false
+          tags: mlops-assignment2/pet-inference:latest
+
+      - name: Login to GitHub Container Registry (GHCR)
+        if: ${{ secrets.GITHUB_TOKEN }}
+        uses: docker/login-action@v2
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Push image to GHCR
+        if: ${{ secrets.GITHUB_TOKEN }}
+        uses: docker/build-push-action@v4
+        with:
+          context: ./MLOps_Assignment_2_Grp_99
+          file: ./MLOps_Assignment_2_Grp_99/Dockerfile
+          push: true
+          tags: ghcr.io/${{ github.repository_owner }}/mlops-assignment2:latest
+
+      - name: Login to Docker Hub
+        if: ${{ secrets.DOCKERHUB_USERNAME && secrets.DOCKERHUB_PASSWORD }}
+        uses: docker/login-action@v2
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_PASSWORD }}
+
+      - name: Push image to Docker Hub
+        if: ${{ secrets.DOCKERHUB_USERNAME && secrets.DOCKERHUB_PASSWORD }}
+        uses: docker/build-push-action@v4
+        with:
+          context: ./MLOps_Assignment_2_Grp_99
+          file: ./MLOps_Assignment_2_Grp_99/Dockerfile
+          push: true
+          tags: ${{ secrets.DOCKERHUB_USERNAME }}/mlops-assignment2:latest
