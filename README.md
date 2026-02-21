@@ -210,12 +210,24 @@
     ```bash
         localhost:8000/metrics
     ```
-    ![image-2.png](attachment:image-2.png)
+    - Output
+
+        ```
+        {
+            "request_count": 215,
+            "avg_latency_ms": 89.6065323851829
+        }
 
     ```bash
         localhost:8000/health
     ```
-    ![image.png](attachment:image.png)
+    - Output
+
+        ```
+        {
+            "status": "ok",
+            "model_loaded": true
+        }
 
 - Test client for inference service
 
@@ -265,15 +277,24 @@
 
         ```
         {"status":"ok","model_loaded":true}
-
     ```bash
         curl -X POST "http://localhost:8000/predict" -F "files=@data/processed/PetImages_224_split/test/Cat/111.jpg"
     ```
     - Output:
 
         ```
-        {"predictions":[{"probabilities":[0.9991834759712219,0.0008165583130903542],"predicted_class":0,"predicted_label":null}]}
-
+        {
+            "predictions": [
+                {
+                "probabilities": [
+                    0.9991834759712219,
+                    0.0008165583130903542
+                ],
+                "predicted_class": 0,
+                "predicted_label": null
+                }
+            ]
+        } 
     ```bash
         curl -X POST "http://localhost:8000/predict" -F "files=@data/processed/PetImages_224_split/test/Dog/0.jpg"
     ```
@@ -281,11 +302,42 @@
     - Output:
 
         ```
-        {"predictions":[{"probabilities":[0.005587819032371044,0.9944122433662415],"predicted_class":1,"predicted_label":null}]}
-
+        {
+            "predictions": [
+                {
+                "probabilities": [
+                    0.005587819032371044,
+                    0.9944122433662415
+                ],
+                "predicted_class": 1,
+                "predicted_label": null
+                }
+            ]
+        } 
+        
 - Test inference service logging
 
-    ![image-4.png](attachment:image-4.png)
+    ```
+    2026-02-22 01:24:19,363 INFO req_id=a447e59e-6cea-4655-8160-bb50e0a1e72c method=GET path=/metrics latency_ms=5.0
+    2026-02-22 01:24:19,398 INFO req_id=82be4b24-1802-47ee-9f83-f93879f2c764 method=GET path=/favicon.ico latency_ms=0.5
+    2026-02-22 01:24:19,398 INFO req_id=82be4b24-1802-47ee-9f83-f93879f2c764 method=GET path=/favicon.ico latency_ms=0.5
+    2026-02-22 01:25:32,632 INFO req_id=56224d28-f164-495f-90c4-49ce90c701a2 method=GET path=/predict latency_ms=0.4
+    2026-02-22 01:25:32,632 INFO req_id=56224d28-f164-495f-90c4-49ce90c701a2 method=GET path=/predict latency_ms=0.4
+    2026-02-22 01:25:39,700 INFO req_id=df470e54-150b-4a2c-86e3-feaf1f1d8504 method=GET path=/health latency_ms=1.4
+    2026-02-22 01:25:39,700 INFO req_id=df470e54-150b-4a2c-86e3-feaf1f1d8504 method=GET path=/health latency_ms=1.4
+    2026-02-22 01:27:41,583 INFO predict num_instances=1
+    2026-02-22 01:27:41,583 INFO predict num_instances=1
+    2026-02-22 01:27:41,584 INFO req_id=c61390a4-ffe7-45b9-a890-ffec3b752507 method=POST path=/predict latency_ms=472.9
+    2026-02-22 01:27:41,584 INFO req_id=c61390a4-ffe7-45b9-a890-ffec3b752507 method=POST path=/predict latency_ms=472.9
+    2026-02-22 01:29:41,434 INFO predict num_instances=1
+    2026-02-22 01:29:41,434 INFO predict num_instances=1
+    2026-02-22 01:29:41,435 INFO req_id=ddb55258-7b63-4bae-975b-01b37cbdba81 method=POST path=/predict latency_ms=98.3
+    2026-02-22 01:29:41,435 INFO req_id=ddb55258-7b63-4bae-975b-01b37cbdba81 method=POST path=/predict latency_ms=98.3
+    2026-02-22 01:39:02,327 INFO req_id=049787ea-b6b9-4894-9892-9931d8157749 method=GET path=/health latency_ms=0.8
+    2026-02-22 01:39:02,327 INFO req_id=049787ea-b6b9-4894-9892-9931d8157749 method=GET path=/health latency_ms=0.8
+    2026-02-22 01:39:31,310 INFO req_id=18b0b3da-8c4e-4eb3-a268-dcf3757128c3 method=GET path=/healthsource latency_ms=0.3
+    2026-02-22 01:39:31,310 INFO req_id=18b0b3da-8c4e-4eb3-a268-dcf3757128c3 method=GET path=/healthsource latency_ms=0.3
+    2026-02-22 01:39:55,849 INFO req_id=b37b5931-d088-4f31-b7da-88572512b4b9 method=GET path=/health latency_ms=0.8
 
 - Test model performance script
 
